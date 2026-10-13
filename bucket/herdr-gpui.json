@@ -1,0 +1,21 @@
+{
+    "version": "20261013.1",
+    "description": "Desktop interface for the Herdr daemon",
+    "homepage": "https://github.com/penso/herdr-gpui",
+    "license": "Apache-2.0",
+    "architecture": {
+        "64bit": {
+            "url": "https://github.com/penso/herdr-gpui/releases/download/v20261013.1/Herdr-20261013.1-x86_64-pc-windows-msvc.zip",
+            "hash": "bb1b2c0c2202bc1cde7d1d8d7e5b12c5cdc99322fc80ed8b6b0e3e4c0a54791e",
+            "extract_dir": "Herdr-20261013.1-x86_64-pc-windows-msvc"
+        },
+        "arm64": {
+            "url": "https://github.com/penso/herdr-gpui/releases/download/v20261013.1/Herdr-20261013.1-aarch64-pc-windows-msvc.zip",
+            "hash": "1bf4ed7b2283a651175e3656f8db4c13d64f4ef899e63f267964cdeeb5930cef",
+            "extract_dir": "Herdr-20261013.1-aarch64-pc-windows-msvc"
+        }
+    },
+    "bin": "herdr-gpui.exe",
+    "shortcuts": [["herdr-gpui.exe", "Herdr"]],
+    "notes": "Experimental, unsigned Windows GUI build. Requires an existing Herdr daemon."
+}

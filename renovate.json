@@ -1,0 +1,52 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "enabledManagers": [
+    "custom.regex"
+  ],
+  "dependencyDashboard": false,
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^bucket/herdr-gpui\\.json$/"
+      ],
+      "matchStrings": [
+        "\"version\": \"(?<releaseVersion>\\d{8}\\.\\d+)\""
+      ],
+      "currentValueTemplate": "v{{{releaseVersion}}}",
+      "depNameTemplate": "penso/herdr-gpui",
+      "datasourceTemplate": "github-releases",
+      "versioningTemplate": "regex:^v?(?<major>\\d{8})\\.(?<patch>\\d+)$",
+      "autoReplaceStringTemplate": "\"version\": \"{{{replace \"^v\" \"\" newValue}}}\""
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^bucket/herdr-gpui\\.json$/"
+      ],
+      "matchStrings": [
+        "\"url\": \"https://github\\.com/penso/herdr-gpui/releases/download/(?<currentValue>v\\d{8}\\.\\d+)/Herdr-\\d{8}\\.\\d+-(?<target>x86_64|aarch64)-pc-windows-msvc\\.zip\",\\s+\"hash\": \"(?<currentDigest>[a-f0-9]{64})\",\\s+\"extract_dir\": \"Herdr-\\d{8}\\.\\d+-(?:x86_64|aarch64)-pc-windows-msvc\""
+      ],
+      "depNameTemplate": "penso/herdr-gpui",
+      "datasourceTemplate": "github-release-attachments",
+      "versioningTemplate": "regex:^v?(?<major>\\d{8})\\.(?<patch>\\d+)$",
+      "autoReplaceStringTemplate": "\"url\": \"https://github.com/penso/herdr-gpui/releases/download/{{{newValue}}}/Herdr-{{{replace \"^v\" \"\" newValue}}}-{{{depType}}}-pc-windows-msvc.zip\",\n            \"hash\": \"{{{newDigest}}}\",\n            \"extract_dir\": \"Herdr-{{{replace \"^v\" \"\" newValue}}}-{{{depType}}}-pc-windows-msvc\"",
+      "depTypeTemplate": "{{{target}}}"
+    }
+  ],
+  "packageRules": [
+    {
+      "matchPackageNames": [
+        "penso/herdr-gpui"
+      ],
+      "groupName": "Herdr",
+      "groupSlug": "herdr",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash",
+      "platformAutomerge": true,
+      "ignoreUnstable": true
+    }
+  ],
+  "prConcurrentLimit": 1
+}

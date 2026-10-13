@@ -1,0 +1,34 @@
+name: Validate
+
+on:
+  push:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  manifest:
+    name: Manifest and Renovate
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - run: python3 scripts/validate.py
+      - run: docker run --rm -v "$PWD:/work:ro" -w /work --entrypoint node ghcr.io/renovatebot/renovate:44.155.1 --test tests/renovate.test.mjs
+      - run: docker run --rm -v "$PWD:/work" -w /work --entrypoint renovate-config-validator ghcr.io/renovatebot/renovate:44.155.1 --strict renovate.json
+
+  install:
+    name: Windows Scoop install
+    runs-on: windows-latest
+    steps:
+      - uses: actions/checkout@v7.0.1
+      - name: Install through Scoop
+        shell: pwsh
+        run: |
+          Invoke-RestMethod https://get.scoop.sh | Invoke-Expression
+          scoop install "$env:GITHUB_WORKSPACE/bucket/herdr-gpui.json"
+          if ($LASTEXITCODE -ne 0) { throw 'Scoop installation failed' }
+          if (-not (Get-Command herdr-gpui -ErrorAction SilentlyContinue)) { throw 'Command shim missing' }
+          $shortcut = "$env:APPDATA/Microsoft/Windows/Start Menu/Programs/Scoop Apps/Herdr.lnk"
+          if (-not (Test-Path $shortcut)) { throw 'Start Menu shortcut missing' }
