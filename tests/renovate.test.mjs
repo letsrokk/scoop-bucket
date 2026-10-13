@@ -41,8 +41,11 @@ test('Renovate updates both architectures atomically across revisions and dates'
           hash: hashes[target], extract_dir: directory,
         });
       }
-      assert.equal(updated.bin, 'herdr-gpui.exe');
-      assert.deepEqual(updated.shortcuts, [['herdr-gpui.exe', 'Herdr']]);
+      assert.deepEqual(updated.bin, JSON.parse(original).bin);
+      assert.deepEqual(updated.shortcuts, JSON.parse(original).shortcuts);
+      for (const property of ['depends', 'pre_install', 'post_install']) {
+        assert.deepEqual(updated[property], JSON.parse(original)[property]);
+      }
     }
   } finally {
     GlobalConfig.reset();
