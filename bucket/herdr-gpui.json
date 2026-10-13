@@ -17,7 +17,7 @@
     },
     "depends": "rcedit",
     "pre_install": [
-        "$bucketDir = if ($bucket) { Find-BucketDirectory $bucket } else { Split-Path (Split-Path $url) }",
+        "$bucketDir = if ($bucket) { Find-BucketDirectory $bucket -Root } else { Split-Path (Split-Path $url) }",
         "Copy-Item \"$bucketDir\\scripts\\herdr-gpui\" \"$dir\\icons\" -Recurse"
     ],
     "bin": [["conhost.exe", "herdr-gpui", "--headless \"$dir\\herdr-gpui.exe\""]],
