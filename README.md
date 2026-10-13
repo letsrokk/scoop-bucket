@@ -12,14 +12,10 @@ scoop bucket add letsrokk https://github.com/letsrokk/scoop-bucket.git
 
 ## Supported apps
 
-### Herdr GPUI
+### [Herdr GPUI](https://github.com/penso/herdr-gpui)
 
-[Herdr GPUI](https://github.com/penso/herdr-gpui) is a portable desktop interface for the Herdr daemon. Supports Windows x64 and ARM64; Scoop selects the appropriate architecture automatically.
-
-The Windows builds are experimental and unsigned. An existing Herdr daemon is required; this package installs only the GUI.
+Native client for Herdr on macOS, Linux, and Windows, built with Rust and GPUI. View terminal sessions, workspaces, Git worktrees, and agent activity through your local Herdr daemon.
 
 ```powershell
 scoop install letsrokk/herdr-gpui
 ```
-
-Launch **Herdr** from the Start Menu or run `herdr-gpui`.
