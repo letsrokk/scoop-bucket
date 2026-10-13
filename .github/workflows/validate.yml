@@ -27,7 +27,7 @@ jobs:
         shell: pwsh
         run: |
           Invoke-RestMethod https://get.scoop.sh | Invoke-Expression
-          scoop bucket add letsrokk "$env:GITHUB_WORKSPACE"
+          scoop bucket add letsrokk ([uri]$env:GITHUB_WORKSPACE).AbsoluteUri
           if ($LASTEXITCODE -ne 0) { throw 'Scoop bucket registration failed' }
           scoop install letsrokk/herdr-gpui
           if ($LASTEXITCODE -ne 0) { throw 'Scoop installation failed' }
