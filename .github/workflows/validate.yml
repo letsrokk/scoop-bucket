@@ -45,10 +45,7 @@ jobs:
           $shim = (Get-Command herdr-gpui).Source
           $shimConfig = Get-Content ([IO.Path]::ChangeExtension($shim, '.shim')) -Raw
           $appDir = scoop prefix herdr-gpui
-          $expectedTarget = "path = `"$appDir\conhost.exe`""
-          if ($shimConfig -notmatch "(?m)^$([regex]::Escape($expectedTarget))\r?$") { throw 'Shim must launch app-local conhost' }
-          $hostProcess = Start-Process "$appDir\conhost.exe" -ArgumentList "--headless `"$env:SystemRoot\System32\cmd.exe`" /d /c exit 0" -Wait -PassThru
-          if ($hostProcess.ExitCode -ne 0) { throw 'App-local conhost failed to launch a child process' }
+          if ($shimConfig -notmatch '(?m)^path = ".*\\(?:System32|Sysnative)\\conhost\.exe"\r?$') { throw 'Shim must launch system conhost' }
           $expectedArgs = "--headless `"$appDir\herdr-gpui.exe`""
           if ($shimConfig -notmatch "(?m)^args = $([regex]::Escape($expectedArgs))\r?$") { throw 'Headless shim arguments incorrect' }
           $shortcut = "$env:APPDATA/Microsoft/Windows/Start Menu/Programs/Scoop Apps/Herdr.lnk"
