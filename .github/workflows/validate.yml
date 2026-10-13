@@ -30,5 +30,29 @@ jobs:
           scoop install "$env:GITHUB_WORKSPACE/bucket/herdr-gpui.json"
           if ($LASTEXITCODE -ne 0) { throw 'Scoop installation failed' }
           if (-not (Get-Command herdr-gpui -ErrorAction SilentlyContinue)) { throw 'Command shim missing' }
+          $shim = (Get-Command herdr-gpui).Source
+          $shimConfig = Get-Content ([IO.Path]::ChangeExtension($shim, '.shim')) -Raw
+          if ($shimConfig -notmatch '(?m)^path = ".*\\conhost\.exe"\r?$') { throw 'Shim must launch conhost' }
+          $appDir = scoop prefix herdr-gpui
+          $expectedArgs = "--headless `"$appDir\herdr-gpui.exe`""
+          if ($shimConfig -notmatch "(?m)^args = $([regex]::Escape($expectedArgs))\r?$") { throw 'Headless shim arguments incorrect' }
           $shortcut = "$env:APPDATA/Microsoft/Windows/Start Menu/Programs/Scoop Apps/Herdr.lnk"
           if (-not (Test-Path $shortcut)) { throw 'Start Menu shortcut missing' }
+          $link = (New-Object -ComObject WScript.Shell).CreateShortcut($shortcut)
+          if ($link.TargetPath -ne $shim) { throw 'Start Menu shortcut must use headless shim' }
+          if ($link.IconLocation -ne "$appDir\icons\herdr.ico,0") { throw 'Start Menu shortcut must use Herdr icon' }
+          Add-Type -AssemblyName System.Drawing
+          $icon = [Drawing.Icon]::ExtractAssociatedIcon($shim)
+          if (-not $icon) { throw 'Shim icon missing' }
+          $actual = $icon.ToBitmap()
+          $expectedIcon = [Drawing.Icon]::new("$appDir\icons\herdr.ico", $actual.Width, $actual.Height)
+          $expected = $expectedIcon.ToBitmap()
+          for ($y = 0; $y -lt $actual.Height; $y++) {
+            for ($x = 0; $x -lt $actual.Width; $x++) {
+              if ($actual.GetPixel($x, $y) -ne $expected.GetPixel($x, $y)) { throw 'Shim icon must match upstream artwork' }
+            }
+          }
+          $expected.Dispose()
+          $expectedIcon.Dispose()
+          $actual.Dispose()
+          $icon.Dispose()

@@ -15,7 +15,16 @@
             "extract_dir": "Herdr-20261013.1-aarch64-pc-windows-msvc"
         }
     },
-    "bin": "herdr-gpui.exe",
-    "shortcuts": [["herdr-gpui.exe", "Herdr"]],
+    "depends": "rcedit",
+    "pre_install": [
+        "$bucketDir = if ($bucket) { Find-BucketDirectory $bucket } else { Split-Path (Split-Path $url) }",
+        "Copy-Item \"$bucketDir\\scripts\\herdr-gpui\" \"$dir\\icons\" -Recurse"
+    ],
+    "bin": [["conhost.exe", "herdr-gpui", "--headless \"$dir\\herdr-gpui.exe\""]],
+    "shortcuts": [["..\\..\\..\\shims\\herdr-gpui.exe", "Herdr", "", "icons\\herdr.ico"]],
+    "post_install": [
+        "rcedit \"$(shimdir $global)\\herdr-gpui.exe\" --set-icon \"$dir\\icons\\herdr.ico\"",
+        "if ($LASTEXITCODE -ne 0) { throw 'Failed to set Herdr shim icon' }"
+    ],
     "notes": "Experimental, unsigned Windows GUI build. Requires an existing Herdr daemon."
 }
