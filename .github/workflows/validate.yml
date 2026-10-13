@@ -27,7 +27,9 @@ jobs:
         shell: pwsh
         run: |
           Invoke-RestMethod https://get.scoop.sh | Invoke-Expression
-          scoop install "$env:GITHUB_WORKSPACE/bucket/herdr-gpui.json"
+          scoop bucket add letsrokk "$env:GITHUB_WORKSPACE"
+          if ($LASTEXITCODE -ne 0) { throw 'Scoop bucket registration failed' }
+          scoop install letsrokk/herdr-gpui
           if ($LASTEXITCODE -ne 0) { throw 'Scoop installation failed' }
           if (-not (Get-Command herdr-gpui -ErrorAction SilentlyContinue)) { throw 'Command shim missing' }
           $shim = (Get-Command herdr-gpui).Source
