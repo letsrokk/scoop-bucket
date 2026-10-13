@@ -1,0 +1,16 @@
+Herdr UI
+Copyright 2026 Fabien Penso
+
+herdr.ico is a Windows ICO conversion of the official Herdr artwork:
+https://github.com/penso/herdr-gpui/blob/79ca2ce97b45089e792e7bc5e14a0554c74077b9/assets/icons/herdr-ui-icon-clean.png
+
+The PNG was resized to 16, 24, 32, 48, 64, 128, and 256 pixels using macOS
+sips and packaged as PNG images in an ICO container. The artwork is unchanged.
+
+The application icon uses a ram path adapted from Herdr's logo:
+https://github.com/herdrdev/herdr/blob/HEAD/assets/logo.svg
+The upstream artwork is licensed under Apache-2.0. This adaptation places the
+ram and terminal prompt on a simple ivory tile, with modified scaling,
+placement, and flat graphite coloring.
+
+The full Apache License, Version 2.0 is in LICENSE beside this file.
