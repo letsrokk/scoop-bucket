@@ -18,7 +18,8 @@
     "depends": "rcedit",
     "pre_install": [
         "$bucketDir = if ($bucket) { Find-BucketDirectory $bucket -Root } else { Split-Path (Split-Path $url) }",
-        "Copy-Item \"$bucketDir\\scripts\\herdr-gpui\" \"$dir\\icons\" -Recurse"
+        "Copy-Item \"$bucketDir\\scripts\\herdr-gpui\" \"$dir\\icons\" -Recurse",
+        "Copy-Item \"$env:SystemRoot\\System32\\conhost.exe\" \"$dir\\conhost.exe\""
     ],
     "bin": [["conhost.exe", "herdr-gpui", "--headless \"$dir\\herdr-gpui.exe\""]],
     "shortcuts": [["..\\..\\..\\shims\\herdr-gpui.exe", "Herdr", "", "icons\\herdr.ico"]],
