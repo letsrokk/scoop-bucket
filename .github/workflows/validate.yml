@@ -29,13 +29,23 @@ jobs:
           Invoke-RestMethod https://get.scoop.sh | Invoke-Expression
           scoop bucket add letsrokk ([uri]$env:GITHUB_WORKSPACE).AbsoluteUri
           if ($LASTEXITCODE -ne 0) { throw 'Scoop bucket registration failed' }
-          scoop install letsrokk/herdr-gpui
+          $shimDir = Split-Path (Get-Command scoop).Source
+          $legacyAppDir = Join-Path (Split-Path $shimDir) 'apps\herdr-gpui\current'
+          @("path = `"$env:SystemRoot\System32\conhost.exe`"", "args = --headless `"$legacyAppDir\herdr-gpui.exe`"") | Set-Content "$shimDir\herdr-gpui.shim"
+          $installLog = scoop install letsrokk/herdr-gpui *>&1 | Out-String
+          Write-Host $installLog
           if ($LASTEXITCODE -ne 0) { throw 'Scoop installation failed' }
+          if ($installLog -match 'Overwriting shim') { throw 'Herdr shim must not conflict with its previous version' }
+          scoop config last_update ([DateTime]::Now.ToString('o'))
+          $updateLog = scoop update herdr-gpui --force *>&1 | Out-String
+          Write-Host $updateLog
+          if ($LASTEXITCODE -ne 0) { throw 'Scoop update failed' }
+          if ($updateLog -match 'Overwriting shim') { throw 'Herdr shim must not conflict during updates' }
           if (-not (Get-Command herdr-gpui -ErrorAction SilentlyContinue)) { throw 'Command shim missing' }
           $shim = (Get-Command herdr-gpui).Source
           $shimConfig = Get-Content ([IO.Path]::ChangeExtension($shim, '.shim')) -Raw
-          if ($shimConfig -notmatch '(?m)^path = ".*\\conhost\.exe"\r?$') { throw 'Shim must launch conhost' }
           $appDir = scoop prefix herdr-gpui
+          if ($shimConfig -notmatch '(?m)^path = ".*\\(?:System32|Sysnative)\\conhost\.exe"\r?$') { throw 'Shim must launch system conhost' }
           $expectedArgs = "--headless `"$appDir\herdr-gpui.exe`""
           if ($shimConfig -notmatch "(?m)^args = $([regex]::Escape($expectedArgs))\r?$") { throw 'Headless shim arguments incorrect' }
           $shortcut = "$env:APPDATA/Microsoft/Windows/Start Menu/Programs/Scoop Apps/Herdr.lnk"

@@ -18,7 +18,10 @@
     "depends": "rcedit",
     "pre_install": [
         "$bucketDir = if ($bucket) { Find-BucketDirectory $bucket -Root } else { Split-Path (Split-Path $url) }",
-        "Copy-Item \"$bucketDir\\scripts\\herdr-gpui\" \"$dir\\icons\" -Recurse"
+        "Copy-Item \"$bucketDir\\scripts\\herdr-gpui\" \"$dir\\icons\" -Recurse",
+        "# Avoid Scoop treating system conhost as a competing app when replacing Herdr's own shim.",
+        "$shim = \"$(shimdir $global)\\herdr-gpui.shim\"",
+        "if ((get_app_name_from_shim $shim) -eq 'herdr-gpui') { Remove-Item $shim }"
     ],
     "bin": [["conhost.exe", "herdr-gpui", "--headless \"$dir\\herdr-gpui.exe\""]],
     "shortcuts": [["..\\..\\..\\shims\\herdr-gpui.exe", "Herdr", "", "icons\\herdr.ico"]],
