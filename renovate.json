@@ -50,12 +50,23 @@
   "packageRules": [
     {
       "matchPackageNames": [
-        "penso/herdr-gpui",
+        "penso/herdr-gpui"
+      ],
+      "groupName": "Herdr GPUI",
+      "groupSlug": "herdr-gpui",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash",
+      "platformAutomerge": true,
+      "ignoreUnstable": true
+    },
+    {
+      "matchPackageNames": [
         "app",
         "core"
       ],
-      "groupName": "Herdr",
-      "groupSlug": "herdr",
+      "groupName": "Herdr App and Core",
+      "groupSlug": "herdr-app-core",
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash",
