@@ -12,6 +12,22 @@ scoop bucket add letsrokk https://github.com/letsrokk/scoop-bucket.git
 
 ## Supported apps
 
+### [Herdr App](https://github.com/herdrdev/herdr-app)
+
+Desktop interface for Herdr terminals and coding agents. Installing it also installs `herdr-core`. Windows x64 only.
+
+```powershell
+scoop install letsrokk/herdr-app
+```
+
+### [Herdr Core](https://github.com/herdrdev/herdr-core)
+
+Persistent terminals for coding agents, available as `herdr-core` and `hc`. Can be installed independently of the desktop app. Windows x64 only.
+
+```powershell
+scoop install letsrokk/herdr-core
+```
+
 ### [Herdr GPUI](https://github.com/penso/herdr-gpui)
 
 Native client for Herdr on macOS, Linux, and Windows, built with Rust and GPUI. View terminal sessions, workspaces, Git worktrees, and agent activity through your local Herdr daemon.
