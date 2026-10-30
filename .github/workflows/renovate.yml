@@ -2,8 +2,7 @@ name: Renovate
 
 on:
   schedule:
-    - cron: '37 7 * * *'
-      timezone: Europe/London
+    - cron: '37 0 * * *'
   workflow_dispatch:
 
 permissions:

@@ -32,6 +32,19 @@
       "versioningTemplate": "regex:^v?(?<major>\\d{8})\\.(?<patch>\\d+)$",
       "autoReplaceStringTemplate": "\"url\": \"https://github.com/penso/herdr-gpui/releases/download/{{{newValue}}}/Herdr-{{{replace \"^v\" \"\" newValue}}}-{{{depType}}}-pc-windows-msvc.zip\",\n            \"hash\": \"{{{newDigest}}}\",\n            \"extract_dir\": \"Herdr-{{{replace \"^v\" \"\" newValue}}}-{{{depType}}}-pc-windows-msvc\"",
       "depTypeTemplate": "{{{target}}}"
+    },
+    {
+      "customType": "regex",
+      "managerFilePatterns": [
+        "/^bucket/herdr-(app|core)\\.json$/"
+      ],
+      "matchStrings": [
+        "\"version\": \"(?<currentValue>\\d+\\.\\d+\\.\\d+)\",\\s+\"description\": \"[^\"]+\",\\s+\"homepage\": \"https://github\\.com/herdrdev/herdr-(?<packageName>app|core)\"",
+        "\"url\": \"https://releases\\.herdr\\.dev/(?<packageName>app|core)/(?<currentValue>\\d+\\.\\d+\\.\\d+)/herdr-(?:app|core)-windows-x86_64\\.(?:tar\\.gz|zip)\",\\s+\"hash\": \"(?<currentDigest>[a-f0-9]{64})\""
+      ],
+      "depNameTemplate": "herdrdev/herdr-{{{packageName}}}",
+      "datasourceTemplate": "custom.herdr",
+      "versioningTemplate": "semver"
     }
   ],
   "packageRules": [
@@ -39,8 +52,21 @@
       "matchPackageNames": [
         "penso/herdr-gpui"
       ],
-      "groupName": "Herdr",
-      "groupSlug": "herdr",
+      "groupName": "Herdr GPUI",
+      "groupSlug": "herdr-gpui",
+      "automerge": true,
+      "automergeType": "pr",
+      "automergeStrategy": "squash",
+      "platformAutomerge": true,
+      "ignoreUnstable": true
+    },
+    {
+      "matchPackageNames": [
+        "app",
+        "core"
+      ],
+      "groupName": "Herdr App and Core",
+      "groupSlug": "herdr-app-core",
       "automerge": true,
       "automergeType": "pr",
       "automergeStrategy": "squash",
@@ -48,5 +74,13 @@
       "ignoreUnstable": true
     }
   ],
-  "prConcurrentLimit": 1
+  "prConcurrentLimit": 1,
+  "customDatasources": {
+    "herdr": {
+      "defaultRegistryUrlTemplate": "https://releases.herdr.dev/{{{packageName}}}/latest.json",
+      "transformTemplates": [
+        "{\"releases\":[{\"version\":version,\"digest\":targets.\"windows-x86_64\".sha256}]}"
+      ]
+    }
+  }
 }
