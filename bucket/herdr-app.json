@@ -1,12 +1,12 @@
 {
-    "version": "0.1.10",
+    "version": "0.1.11",
     "description": "Desktop interface for Herdr terminals and coding agents",
     "homepage": "https://github.com/herdrdev/herdr-app",
     "license": "Apache-2.0",
     "architecture": {
         "64bit": {
-            "url": "https://releases.herdr.dev/app/0.1.10/herdr-app-windows-x86_64.tar.gz",
-            "hash": "6fbd65e25ff8c0f3983e862be64b109ff25bd9c4bfb756448d6c83195daf6a02"
+            "url": "https://releases.herdr.dev/app/0.1.11/herdr-app-windows-x86_64.tar.gz",
+            "hash": "d61f36a4ebbd2d6485f0962f7d6cc7ec574a08cf8c3282f6d338d80a2f477ab6"
         }
     },
     "extract_dir": "herdr-app",
