@@ -74,7 +74,7 @@
       "ignoreUnstable": true
     }
   ],
-  "prConcurrentLimit": 1,
+  "prConcurrentLimit": 2,
   "customDatasources": {
     "herdr": {
       "defaultRegistryUrlTemplate": "https://releases.herdr.dev/{{{packageName}}}/latest.json",
